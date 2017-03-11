@@ -11,46 +11,52 @@
 'use strict';
 
 class DirectedGraph {
-	constructor(graph) {
-		if (!checkGraphForm(graph)) throw new Error('Not a graph!');
+  constructor(graph) {
+    let i;
+    if (!checkGraphForm(graph)) throw new Error('Not a graph!');
     this.vertexNum = graph[0][0];
     this.edgesNum = graph[0][1];
     this.edges = [];
-    for (var i = 1; i <= this.edgesNum; i++) {
+    for (i = 1; i <= this.edgesNum; i++) {
       this.edges.push(graph[i]);
     }
-	}
-  Output() {
+  }
+  output() {
+    let i;
     console.dir('Number of vertexes: ' + this.vertexNum);
     console.dir('Number of edges: ' + this.edgesNum);
-    for (var i = 0; i < this.edgesNum; i++) {
-      console.dir('Edge ' + (i+1) + ': ' + this.edges[i][0] + ' -> ' + this.edges[i][1]);
+    for (i = 0; i < this.edgesNum; i++) {
+      console.dir('Edge ' + (i + 1) + ': ' + this.edges[i][0] + ' -> ' + this.edges[i][1]);
     }
   }
-  Incidence() {
+  incidence() {
+    let i;
+    let j;
     let matrix = [];
-    for (var i = 0; i < this.vertexNum; i++) {
+    for (i = 0; i < this.vertexNum; i++) {
       matrix.push([]);
-      for (var j = 0; j < this.edgesNum; j++) {
+      for (j = 0; j < this.edgesNum; j++) {
         matrix[i].push(0);
       }
     }
-    for (var j = 0; j < this.edgesNum; j++) {
+    for (j = 0; j < this.edgesNum; j++) {
       matrix[this.edges[j][0] - 1][j] = 1;
       matrix[this.edges[j][1] - 1][j] = -1;
       if (this.edges[j][0] === this.edges[j][1]) matrix[this.edges[j][0] - 1][j] = 2;
     }
     return matrix;
   }
-  Adjacency() {
+  adjacency() {
+    let i;
+    let j;
     let matrix = [];
-    for (var i = 0; i < this.vertexNum; i++) {
+    for (i = 0; i < this.vertexNum; i++) {
       matrix.push([]);
-      for (var j = 0; j < this.vertexNum; j++) {
+      for (j = 0; j < this.vertexNum; j++) {
         matrix[i].push(0);
       }
     }
-    for (var j = 0; j < this.edgesNum; j++) {
+    for (j = 0; j < this.edgesNum; j++) {
       matrix[this.edges[j][0] - 1][this.edges[j][1] - 1] = 1;
     }
     return matrix;
@@ -58,27 +64,27 @@ class DirectedGraph {
 }
 
 function checkGraphForm(graph) {
-    if (graph instanceof Array && graph.length > 0) {
-      for (var i = 0; i < graph.length; i++) {
-        if (graph[i].length != 2 || !graph[i] instanceof Array) return false;
-      }
+  let i;
+  if (graph instanceof Array && graph.length > 0) {
+    for (i = 0; i < graph.length; i++) {
+      if (graph[i].length !== 2 || !(graph[i] instanceof Array)) return false;
     }
-    else {
-      return false;
-    }
-    for (var i = 1; i < graph.length; i++) {
-      if (graph[i][0] > graph[0][0] || graph[i][1] > graph[0][0]) return false;
-      if (graph[i][0] < 1 || graph[i][1] < 1) return false;
-      if (graph.length != graph[0][1] + 1) return false;
-    }
-    return true;
+  } else {
+    return false;
+  }
+  for (i = 1; i < graph.length; i++) {
+    if (graph[i][0] > graph[0][0] || graph[i][1] > graph[0][0]) return false;
+    if (graph[i][0] < 1 || graph[i][1] < 1) return false;
+    if (graph.length !== graph[0][1] + 1) return false;
+  }
+  return true;
 }
 
 try {
-  const graph = new DirectedGraph([[5,7],[2,1],[5,2],[4,1],[1,3],[5,1],[3,4],[3,3]]);
-  graph.Output();
-  console.dir(graph.Incidence());
-  console.dir(graph.Adjacency());
+  const graph = new DirectedGraph([[5, 7], [2, 1], [5, 2], [4, 1], [1, 3], [5, 1], [3, 4], [3, 3]]);
+  graph.output();
+  console.dir(graph.incidence());
+  console.dir(graph.adjacency());
 } catch (E) {
   console.dir(E.message);
 }

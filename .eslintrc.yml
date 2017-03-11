@@ -15,7 +15,7 @@ rules:
       MemberExpression: 1
   linebreak-style:
     - error
-    - linux
+    - unix
   quotes:
     - error
     - single
