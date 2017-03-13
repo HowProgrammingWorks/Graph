@@ -56,4 +56,19 @@ class DirectedGraph {
     if (vertexIndex < 0) return false;
     return true;
   }
+  getWeight(v1, v2) {
+    return this._weight[v1][v2];
+  }
+  transpose() {
+    const size = this.size;
+    let transposedGraph = new DirectedGraph(size);
+    let v, w, weight;
+    for (v = 0; v < size; ++v) {
+      for (w of this._adjacency[v]) {
+        weight = this.getWeight(v, w);
+        transposedGraph.connect(w, v, weight);
+      }
+    }
+    return transposedGraph;
+  }
 }
