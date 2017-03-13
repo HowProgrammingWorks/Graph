@@ -42,9 +42,18 @@ class DirectedGraph {
       return false;
     }
     const vertexIndex = this._adjacency[v1].indexOf(v2);
-    if (vertexIndex === -1) return false;
+    if (vertexIndex < 0) return false;
     this._adjacency[v1].splice(vertexIndex, 1);
     this._weight[v1][v2] = undefined;
     --this._indegree[v2];
+    return true;
+  }
+  isConnected(v1, v2) {
+    if (!this.hasVertex(v1) || !this.hasVertex(v2)) {
+      return false;
+    }
+    const vertexIndex = this._adjacency[v1].indexOf(v2);
+    if (vertexIndex < 0) return false;
+    return true;
   }
 }
