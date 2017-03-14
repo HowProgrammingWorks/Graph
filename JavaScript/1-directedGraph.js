@@ -71,4 +71,44 @@ class DirectedGraph {
     }
     return transposedGraph;
   }
+  /**
+   * Computes shortest paths from a single source vertex
+   * to all of the other vertices (Bellman-Ford inplementation).
+   *
+   * @param  from = the vertex
+   * @return distanceArr[v] = minimum distance to v
+   *         parentArr[v] = parent vertex for v in the shortest path
+   */
+  minimunDistance(from) {
+    if (!this.hasVertex(from)) {
+      return null;
+    }
+    let distance = new Array(this.size);
+    let parent = new Array(this.size);
+    let i;
+    for (i = 0; i < this.size; ++i) {
+      distance[i] = Infinity;
+      parent[i] = -1;
+    }
+    distance[from] = 0;
+    for (i = 0; i < this.size - 1; ++i) {
+      this._adjacency.forEach((adj, v) => { // for each vertex in the graph
+        adj.forEach(w => { // for each adjacent vertex w to v
+          if (distance[w] > distance[v] + this.getWeight(v, w)) {
+            distance[w] = distance[v] + this.getWeight(v, w);
+            parent[w] = v;
+          }
+        });
+      });
+    }
+    // if any distance[i] changes, the graph has negative cycles
+    this._adjacency.forEach((adj, v) => {
+      adj.forEach(w => {
+        if (distance[w] > distance[v] + this.getWeight(v, w)) {
+          return null;
+        }
+      });
+    });
+    return { distanceArr: distance, parentArr: parent };
+  }
 }
