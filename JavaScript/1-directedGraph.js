@@ -112,3 +112,27 @@ class DirectedGraph {
     return { distanceArr: distance, parentArr: parent };
   }
 }
+
+const myGraph = new DirectedGraph(4);
+myGraph.connect(0, 1, 2);
+myGraph.connect(0, 2, 3);
+myGraph.connect(1, 2, -2);
+myGraph.connect(1, 3, 2);
+myGraph.connect(2, 3, 3);
+
+const checkVertex = 0;
+const checkEdge = [2, 3];
+if (myGraph.hasVertex(checkVertex)) {
+  console.log('I have vertex ' + checkVertex);
+} else {
+  console.log('I do not have a vertex ' + checkVertex + ' :(');
+}
+if (myGraph.isConnected(...checkEdge)) {
+  console.log(checkEdge[0] + ' is connected with ' + checkEdge[1]);
+  console.log('It has weight ' + myGraph.getWeight(...checkEdge));
+}
+console.log('Lets find the shortest paths for checkVertex!');
+console.time('Belman-Ford');
+const result = myGraph.minimunDistance(checkVertex);
+console.timeEnd('Belman-Ford');
+console.dir(result);
