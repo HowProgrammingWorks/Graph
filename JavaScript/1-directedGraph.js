@@ -111,6 +111,28 @@ class DirectedGraph {
     }
     return { distanceArr: distance, parentArr: parent };
   }
+  toposort() {
+    const grey = 1,
+          black = 2,
+          sorted = new Array(),
+          marked = new Array(this.size);
+    const dfs = (v) => {
+      if (marked[v] === grey) return 0;
+      if (marked[v] === black) return 1;
+      marked[v] = grey;
+      for (let w of this._adjacency[v]) {
+        if (!dfs(w)) return undefined;
+      }
+      marked[v] = black;
+      sorted.unshift(v);
+      return marked[v];
+    };
+    for (let v in this._adjacency) {
+      if (marked[v]) continue;
+      if (!dfs(v)) return null;
+    }
+    return sorted;
+  }
 }
 
 const myGraph = new DirectedGraph(4);
@@ -136,3 +158,5 @@ console.time('Belman-Ford');
 const result = myGraph.minimumDistance(checkVertex);
 console.timeEnd('Belman-Ford');
 console.dir(result);
+
+console.log('Toposort test: ' + myGraph.toposort());
