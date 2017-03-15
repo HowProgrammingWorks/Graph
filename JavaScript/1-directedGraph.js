@@ -79,7 +79,7 @@ class DirectedGraph {
    * @return distanceArr[v] = minimum distance to v
    *         parentArr[v] = parent vertex for v in the shortest path
    */
-  minimunDistance(from) {
+  minimumDistance(from) {
     if (!this.hasVertex(from)) {
       return null;
     }
@@ -92,23 +92,23 @@ class DirectedGraph {
     }
     distance[from] = 0;
     for (i = 0; i < this.size - 1; ++i) {
-      this._adjacency.forEach((adj, v) => { // for each vertex in the graph
-        adj.forEach(w => { // for each adjacent vertex w to v
+      for (let v in this._adjacency) { // for each vertex v
+        for (let w of this._adjacency[v]) { // for each incident edge for v
           if (distance[w] > distance[v] + this.getWeight(v, w)) {
             distance[w] = distance[v] + this.getWeight(v, w);
             parent[w] = v;
           }
-        });
-      });
+        }
+      }
     }
     // if any distance[i] changes, the graph has negative cycles
-    this._adjacency.forEach((adj, v) => {
-      adj.forEach(w => {
+    for (let v in this._adjacency) {
+      for (let w of this._adjacency[v]) {
         if (distance[w] > distance[v] + this.getWeight(v, w)) {
           return null;
         }
-      });
-    });
+      }
+    }
     return { distanceArr: distance, parentArr: parent };
   }
 }
@@ -133,6 +133,6 @@ if (myGraph.isConnected(...checkEdge)) {
 }
 console.log('Lets find the shortest paths for checkVertex!');
 console.time('Belman-Ford');
-const result = myGraph.minimunDistance(checkVertex);
+const result = myGraph.minimumDistance(checkVertex);
 console.timeEnd('Belman-Ford');
 console.dir(result);
