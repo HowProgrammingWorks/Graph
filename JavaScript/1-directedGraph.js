@@ -61,7 +61,7 @@ class DirectedGraph {
   }
   transpose() {
     const size = this.size;
-    let transposedGraph = new DirectedGraph(size);
+    const transposedGraph = new DirectedGraph(size);
     let v, w, weight;
     for (v = 0; v < size; ++v) {
       for (w of this._adjacency[v]) {
@@ -83,8 +83,8 @@ class DirectedGraph {
     if (!this.hasVertex(from)) {
       return null;
     }
-    let distance = new Array(this.size);
-    let parent = new Array(this.size);
+    const distance = new Array(this.size);
+    const parent = new Array(this.size);
     let i;
     for (i = 0; i < this.size; ++i) {
       distance[i] = Infinity;
