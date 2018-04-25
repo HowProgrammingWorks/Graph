@@ -1,2 +1,1 @@
-# DirectedGraph
-Directed graph implementations
+# Directed graph and Query language
