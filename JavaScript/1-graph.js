@@ -10,9 +10,8 @@ class Vertex {
     const distinct = new Set(args);
     const links = this.links;
     const keyField = this.graph.keyField;
-    let item, key;
-    for (item of distinct) {
-      key = item.data[keyField];
+    for (const item of distinct) {
+      const key = item.data[keyField];
       links.set(key, null);
     }
     return this;
@@ -26,10 +25,9 @@ class Cursor {
   linked(...names) {
     const vertices = this.vertices;
     const result = new Set();
-    let vertex, condition, name;
-    for (vertex of vertices) {
-      condition = true;
-      for (name of names) {
+    for (const vertex of vertices) {
+      let condition = true;
+      for (const name of names) {
         condition = condition && vertex.links.has(name);
       }
       if (condition) result.add(vertex);
@@ -53,12 +51,11 @@ class Graph {
   }
   select(query) {
     const vertices = new Set();
-    let vertex, condition, data, field;
-    for (vertex of this.vertices.values()) {
-      condition = true;
-      data = vertex.data;
+    for (const vertex of this.vertices.values()) {
+      let condition = true;
+      const data = vertex.data;
       if (data) {
-        for (field in query) {
+        for (const field in query) {
           condition = condition && data[field] === query[field];
         }
         if (condition) vertices.add(vertex);
