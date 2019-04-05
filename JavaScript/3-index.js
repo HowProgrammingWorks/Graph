@@ -1,5 +1,7 @@
 'use strict';
 
+const intersection = (s1, s2) => new Set([...s1].filter(v => s2.has(v)));
+
 class Vertex {
   constructor(graph, data) {
     this.graph = graph;
@@ -51,15 +53,21 @@ class Graph {
     return vertex;
   }
   select(query) {
-    const vertices = new Set();
-    for (const vertex of this.vertices.values()) {
-      let condition = true;
-      const data = vertex.data;
-      if (data) {
-        for (const field in query) {
-          condition = condition && data[field] === query[field];
+    const keys = Object.keys(query);
+    let vertices;
+    for (const field of keys) {
+      const idx = this.indices.get(field);
+      if (idx) {
+        const value = query[field];
+        const records = idx.get(value);
+        vertices = vertices ? intersection(vertices, records) : records;
+      } else {
+        for (const vertex of vertices.values()) {
+          const data = vertex.data;
+          if (data[field] !== query[field]) {
+            vertices.delete(vertex);
+          }
         }
-        if (condition) vertices.add(vertex);
       }
     }
     return new Cursor(vertices);
@@ -126,7 +134,7 @@ graph.insert([
   { name: 'Trajan', city: 'Sevilla', born: 98, dynasty: 'Nerva–Trajan' }
 ]);
 
-graph.index('dynasty');
+//graph.index('dynasty');
 
 graph.link('Marcus Aurelius').to('Lucius Verus');
 graph.link('Lucius Verus').to('Trajan', 'Marcus Aurelius', 'Marcus Aurelius');
