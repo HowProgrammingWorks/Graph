@@ -80,7 +80,19 @@ class Graph {
   }
   insert(records) {
     for (const record of records) {
-      this.add(record);
+      const vertex = this.add(record);
+      const keys = Object.keys(record);
+      for (const [key, idx] of this.indices) {
+        if (keys.includes(key)) {
+          const value = record[key];
+          let records = idx.get(value);
+          if (!records) {
+            records = new Set();
+            idx.set(value, records);
+          }
+          records.add(vertex);
+        }
+      }
     }
   }
   index(key) {
@@ -104,7 +116,7 @@ class Graph {
 
 // Usage
 
-const graph = new Graph('name');
+const graph = new Graph('name').index('city');
 
 graph.insert([
   { name: 'Marcus Aurelius', city: 'Rome', born: 121, dynasty: 'Antonine' },
@@ -113,6 +125,8 @@ graph.insert([
   { name: 'Hadrian', city: 'Santiponce', born: 76, dynasty: 'Nerva–Trajan' },
   { name: 'Trajan', city: 'Sevilla', born: 98, dynasty: 'Nerva–Trajan' }
 ]);
+
+graph.index('dynasty');
 
 graph.link('Marcus Aurelius').to('Lucius Verus');
 graph.link('Lucius Verus').to('Trajan', 'Marcus Aurelius', 'Marcus Aurelius');
@@ -123,11 +137,8 @@ graph.link('Trajan').to('Lucius Verus', 'Marcus Aurelius');
 console.dir({ graph }, { depth: null });
 
 const res = graph
-  .index('city').index('dynasty')
   .select({ city: 'Rome', dynasty: 'Antonine' })
   .linked('Trajan');
-
-console.dir({ graph }, { depth: null });
 
 console.log('\nQuery result:\n');
 for (const item of res.vertices) {
