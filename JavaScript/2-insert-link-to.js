@@ -8,11 +8,11 @@ class Vertex {
   }
   link(...args) {
     const distinct = new Set(args);
-    const links = this.links;
-    const keyField = this.graph.keyField;
+    const { links } = this;
+    const { keyField } = this.graph;
     for (const item of distinct) {
       const key = item.data[keyField];
-      links.set(key, null);
+      links.set(key, item);
     }
     return this;
   }
@@ -23,7 +23,7 @@ class Cursor {
     this.vertices = vertices;
   }
   linked(...names) {
-    const vertices = this.vertices;
+    const { vertices } = this;
     const result = new Set();
     for (const vertex of vertices) {
       let condition = true;
@@ -53,7 +53,7 @@ class Graph {
     const vertices = new Set();
     for (const vertex of this.vertices.values()) {
       let condition = true;
-      const data = vertex.data;
+      const { data } = vertex;
       if (data) {
         for (const field in query) {
           condition = condition && data[field] === query[field];
@@ -64,10 +64,10 @@ class Graph {
     return new Cursor(vertices);
   }
   link(source) {
-    const vertices = this.vertices;
+    const { vertices } = this;
+    const from = vertices.get(source);
     return {
       to(...destinations) {
-        const from = vertices.get(source);
         if (from) {
           destinations.forEach(destination => {
             const target = vertices.get(destination);
@@ -93,7 +93,7 @@ graph.insert([
   { name: 'Lucius Verus', city: 'Rome', born: 130, dynasty: 'Antonine' },
   { name: 'Antoninus Pius', city: 'Lanuvium', born: 86, dynasty: 'Antonine' },
   { name: 'Hadrian', city: 'Santiponce', born: 76, dynasty: 'Nerva–Trajan' },
-  { name: 'Trajan', city: 'Sevilla', born: 98, dynasty: 'Nerva–Trajan' }
+  { name: 'Trajan', city: 'Sevilla', born: 98, dynasty: 'Nerva–Trajan' },
 ]);
 
 graph.link('Marcus Aurelius').to('Lucius Verus');

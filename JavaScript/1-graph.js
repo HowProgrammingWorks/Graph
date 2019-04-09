@@ -8,11 +8,11 @@ class Vertex {
   }
   link(...args) {
     const distinct = new Set(args);
-    const links = this.links;
-    const keyField = this.graph.keyField;
+    const { links } = this;
+    const { keyField } = this.graph;
     for (const item of distinct) {
-      const key = item.data[keyField];
-      links.set(key, null);
+      const value = item.data[keyField];
+      links.set(value, item);
     }
     return this;
   }
@@ -23,7 +23,7 @@ class Cursor {
     this.vertices = vertices;
   }
   linked(...names) {
-    const vertices = this.vertices;
+    const { vertices } = this;
     const result = new Set();
     for (const vertex of vertices) {
       let condition = true;
@@ -53,7 +53,7 @@ class Graph {
     const vertices = new Set();
     for (const vertex of this.vertices.values()) {
       let condition = true;
-      const data = vertex.data;
+      const { data } = vertex;
       if (data) {
         for (const field in query) {
           condition = condition && data[field] === query[field];
@@ -69,21 +69,36 @@ class Graph {
 
 const graph = new Graph('name');
 
-const marcus = graph.add(
-  { name: 'Marcus Aurelius', city: 'Rome', born: 121, dynasty: 'Antonine' }
-);
-const lucius = graph.add(
-  { name: 'Lucius Verus', city: 'Rome', born: 130, dynasty: 'Antonine' }
-);
-const pius = graph.add(
-  { name: 'Antoninus Pius', city: 'Lanuvium', born: 86, dynasty: 'Antonine' }
-);
-const hadrian = graph.add(
-  { name: 'Hadrian', city: 'Santiponce', born: 76, dynasty: 'Nerva–Trajan' }
-);
-const trajan = graph.add(
-  { name: 'Trajan', city: 'Sevilla', born: 98, dynasty: 'Nerva–Trajan' }
-);
+const marcus = graph.add({
+  name: 'Marcus Aurelius',
+  city: 'Rome',
+  born: 121,
+  dynasty: 'Antonine',
+});
+const lucius = graph.add({
+  name: 'Lucius Verus',
+  city: 'Rome',
+  born: 130,
+  dynasty: 'Antonine',
+});
+const pius = graph.add({
+  name: 'Antoninus Pius',
+  city: 'Lanuvium',
+  born: 86,
+  dynasty: 'Antonine',
+});
+const hadrian = graph.add({
+  name: 'Hadrian',
+  city: 'Santiponce',
+  born: 76,
+  dynasty: 'Nerva–Trajan',
+});
+const trajan = graph.add({
+  name: 'Trajan',
+  city: 'Sevilla',
+  born: 98,
+  dynasty: 'Nerva–Trajan',
+});
 
 marcus.link(lucius);
 lucius.link(trajan, marcus, marcus, marcus);
