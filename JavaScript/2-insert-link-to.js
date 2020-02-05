@@ -6,6 +6,7 @@ class Vertex {
     this.data = data;
     this.links = new Map();
   }
+
   link(...args) {
     const distinct = new Set(args);
     const { links } = this;
@@ -22,6 +23,7 @@ class Cursor {
   constructor(vertices) {
     this.vertices = vertices;
   }
+
   linked(...names) {
     const { vertices } = this;
     const result = new Set();
@@ -41,6 +43,7 @@ class Graph {
     this.keyField = keyField;
     this.vertices = new Map();
   }
+
   add(data) {
     const vertex = new Vertex(this, data);
     const key = data[this.keyField];
@@ -49,6 +52,7 @@ class Graph {
     }
     return vertex;
   }
+
   select(query) {
     const vertices = new Set();
     for (const vertex of this.vertices.values()) {
@@ -63,6 +67,7 @@ class Graph {
     }
     return new Cursor(vertices);
   }
+
   link(source) {
     const { vertices } = this;
     const from = vertices.get(source);
@@ -77,6 +82,7 @@ class Graph {
       }
     };
   }
+
   insert(records) {
     for (const record of records) {
       this.add(record);

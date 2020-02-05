@@ -6,6 +6,7 @@ class Vertex {
     this.data = data;
     this.links = new Map();
   }
+
   link(...args) {
     const distinct = new Set(args);
     const { links } = this;
@@ -22,6 +23,7 @@ class Cursor {
   constructor(vertices) {
     this.vertices = vertices;
   }
+
   linked(...names) {
     const { vertices } = this;
     const result = new Set();
@@ -41,6 +43,7 @@ class Graph {
     this.keyField = keyField;
     this.vertices = new Map();
   }
+
   add(data) {
     const vertex = new Vertex(this, data);
     const key = data[this.keyField];
@@ -49,6 +52,7 @@ class Graph {
     }
     return vertex;
   }
+
   select(query) {
     const vertices = new Set();
     for (const vertex of this.vertices.values()) {
@@ -75,24 +79,28 @@ const marcus = graph.add({
   born: 121,
   dynasty: 'Antonine',
 });
+
 const lucius = graph.add({
   name: 'Lucius Verus',
   city: 'Rome',
   born: 130,
   dynasty: 'Antonine',
 });
+
 const pius = graph.add({
   name: 'Antoninus Pius',
   city: 'Lanuvium',
   born: 86,
   dynasty: 'Antonine',
 });
+
 const hadrian = graph.add({
   name: 'Hadrian',
   city: 'Santiponce',
   born: 76,
   dynasty: 'Nerva–Trajan',
 });
+
 const trajan = graph.add({
   name: 'Trajan',
   city: 'Sevilla',
