@@ -74,7 +74,7 @@ class Graph {
     return {
       to(...destinations) {
         if (from) {
-          destinations.forEach(destination => {
+          destinations.forEach((destination) => {
             const target = vertices.get(destination);
             if (target) from.link(target);
           });

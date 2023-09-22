@@ -1,6 +1,6 @@
 'use strict';
 
-const intersection = (s1, s2) => new Set([...s1].filter(v => s2.has(v)));
+const intersection = (s1, s2) => new Set([...s1].filter((v) => s2.has(v)));
 
 class Vertex {
   constructor(graph, data) {
@@ -81,7 +81,7 @@ class Graph {
   link(from) {
     return {
       to(...destinations) {
-        destinations.forEach(target => {
+        destinations.forEach((target) => {
           if (target) from.link(target);
         });
       }
