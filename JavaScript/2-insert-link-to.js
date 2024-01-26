@@ -30,7 +30,10 @@ class Cursor {
     for (const vertex of vertices) {
       let condition = true;
       for (const name of names) {
-        condition = condition && vertex.links.has(name);
+        if (!vertex.links.has(name)) {
+          condition = false;
+          break;
+        }
       }
       if (condition) result.add(vertex);
     }
@@ -45,9 +48,10 @@ class Graph {
   }
 
   add(data) {
-    const vertex = new Vertex(this, data);
     const key = data[this.keyField];
-    if (this.vertices.get(key) === undefined) {
+    let vertex = this.vertices.get(key);
+    if (!vertex) {
+      vertex = new Vertex(this, data);
       this.vertices.set(key, vertex);
     }
     return vertex;
@@ -60,7 +64,10 @@ class Graph {
       const { data } = vertex;
       if (data) {
         for (const field in query) {
-          condition = condition && data[field] === query[field];
+          if (data[field] !== query[field]) {
+            condition = false;
+            break;
+          }
         }
         if (condition) vertices.add(vertex);
       }
@@ -73,13 +80,12 @@ class Graph {
     const from = vertices.get(source);
     return {
       to(...destinations) {
-        if (from) {
-          destinations.forEach((destination) => {
-            const target = vertices.get(destination);
-            if (target) from.link(target);
-          });
+        if (!from) return;
+        for (const destination of destinations) {
+          const target = vertices.get(destination);
+          if (target) from.link(target);
         }
-      }
+      },
     };
   }
 
