@@ -32,7 +32,10 @@ class Cursor {
     for (const vertex of vertices.values()) {
       let condition = true;
       for (const name of names) {
-        condition = condition && vertex.links.has(name);
+        if (!vertex.links.has(name)) {
+          condition = false;
+          break;
+        }
       }
       if (condition) result.add(vertex);
     }
@@ -48,9 +51,10 @@ class Graph {
   }
 
   add(data) {
-    const vertex = new Vertex(this, data);
     const key = data[this.keyField];
-    if (this.vertices.get(key) === undefined) {
+    let vertex = this.vertices.get(key);
+    if (!vertex) {
+      vertex = new Vertex(this, data);
       this.vertices.set(key, vertex);
     }
     return vertex;
@@ -81,10 +85,10 @@ class Graph {
   link(from) {
     return {
       to(...destinations) {
-        destinations.forEach((target) => {
-          if (target) from.link(target);
-        });
-      }
+        for (const destination of destinations) {
+          from.link(destination);
+        }
+      },
     };
   }
 
@@ -95,15 +99,14 @@ class Graph {
       vertices.push(vertex);
       const keys = Object.keys(record);
       for (const [key, idx] of this.indices) {
-        if (keys.includes(key)) {
-          const value = record[key];
-          let records = idx.get(value);
-          if (!records) {
-            records = new Set();
-            idx.set(value, records);
-          }
-          records.add(vertex);
+        if (!keys.includes(key)) continue;
+        const value = record[key];
+        let records = idx.get(value);
+        if (!records) {
+          records = new Set();
+          idx.set(value, records);
         }
+        records.add(vertex);
       }
     }
     return vertices;
