@@ -78,13 +78,13 @@ class Graph {
     return new Cursor(vertices);
   }
 
-  link(from) {
+  static link(from) {
     return {
       to(...destinations) {
         destinations.forEach((target) => {
           if (target) from.link(target);
         });
-      }
+      },
     };
   }
 
@@ -142,11 +142,11 @@ const [marcus, lucius, pius, hadrian, trajan] = graph.insert([
 
 graph.index('dynasty');
 
-graph.link(marcus).to(lucius);
-graph.link(lucius).to(trajan, marcus, marcus);
-graph.link(pius).to(marcus, lucius);
-graph.link(hadrian).to(trajan);
-graph.link(trajan).to(lucius, marcus);
+Graph.link(marcus).to(lucius);
+Graph.link(lucius).to(trajan, marcus, marcus);
+Graph.link(pius).to(marcus, lucius);
+Graph.link(hadrian).to(trajan);
+Graph.link(trajan).to(lucius, marcus);
 
 console.dir({ graph }, { depth: null });
 

@@ -79,7 +79,7 @@ class Graph {
             if (target) from.link(target);
           });
         }
-      }
+      },
     };
   }
 
