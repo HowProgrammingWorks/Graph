@@ -1,6 +1,9 @@
 'use strict';
 
-const intersection = (s1, s2) => new Set([...s1].filter((v) => s2.has(v)));
+const intersection = (s1, s2) => {
+  const common = [...s1].filter((v) => s2.has(v));
+  return new Set(common);
+};
 
 class Vertex {
   constructor(graph, data) {
